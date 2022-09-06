@@ -40,4 +40,47 @@ void printStackTrace()
 	}
 }
 
+void hexdump(const unsigned char *buf, size_t len)
+{
+	size_t i, j;
+	char c, str[17];
+
+	str[16] = 0;
+
+	for (i = 0; i < len; i++)
+	{
+		if ((i % 16 == 0) && (i != 0))
+		{
+			LOG("           ");
+		}
+
+		c = buf[i];
+		str[i % 16] = (((c > 31) && (c < 127)) ? c : '.');
+		LOG("%02x ", (unsigned char)c);
+
+		if ((i % 4) == 3)
+		{
+			LOG(" ");
+		}
+		if ((i % 16) == 15)
+		{
+			LOG("%s\n",str);
+		}
+	}
+
+	if ((i % 16) != 0)
+	{
+		for (j = i % 16; j < 16; j++)
+		{
+			LOG("   ");
+			if ((j % 4) == 3)
+			{
+				LOG(" ");
+			}
+		}
+		str[i % 16] = 0;
+		LOG("%s\n",str);
+	}
+}
+
 }
